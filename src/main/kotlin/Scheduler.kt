@@ -1,4 +1,3 @@
-import datastorage.MatchJsonFileStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -14,18 +13,7 @@ object Scheduler {
 
     init {
         CoroutineScope(Dispatchers.Default).launch {
-            // Launch separate jobs
-            launch { dailyDataUpdate() }
             launch { runNotificationChecker() }
-        }
-    }
-
-    private suspend fun dailyDataUpdate() = coroutineScope {
-        delay(60 * 1000L)
-        while (true) {
-            val matches = MatchService.getAllUpcoming()
-            MatchJsonFileStorage.saveAll(matches.toSet())
-            delay(24 * 60 * 60 * 1000L)
         }
     }
 
