@@ -12,9 +12,11 @@ object Scheduler {
     private val scheduledForNotify = ConcurrentHashMap.newKeySet<UpcomingMatch>()
 
     init {
+        println("Scheduler initializing")
         CoroutineScope(Dispatchers.Default).launch {
             launch { runNotificationChecker() }
         }
+        println("Scheduler is initialized")
     }
 
     private suspend fun runNotificationChecker() = coroutineScope {
@@ -35,7 +37,7 @@ object Scheduler {
                         scheduledForNotify.remove(it)
                     }
                     scheduledForNotify.add(it)
-                    println("Scheduled notification for match ${it.teams} at ${it.date} with delay: $delay ms")
+                    println("Scheduled notification for match ${it.teams} match time ${it.date} with delay: $delay ms")
                 }
             }
 
