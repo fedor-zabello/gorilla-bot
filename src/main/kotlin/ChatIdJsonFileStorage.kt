@@ -1,23 +1,21 @@
-package datastorage
-
 import com.fasterxml.jackson.core.type.TypeReference
 import util.CustomJacksonMapper
 import java.io.File
 
 object ChatIdJsonFileStorage {
     private val jsonMapper = CustomJacksonMapper.mapper
-    private val file = File("chat_id.json")
+    private val chatIds = mutableSetOf<Long>()
+    private val file = File("/var/lib/gorilla-bot/chat_id.json")
 
     @Synchronized
     fun findAll(): MutableSet<Long> {
-        return if (file.exists()) {
-            return jsonMapper.readValue(file, object : TypeReference<MutableSet<Long>>() {})
-        } else mutableSetOf()
-    }
-
-    @Synchronized
-    fun saveAll(chatIdSet: Set<Long>) {
-        jsonMapper.writeValue(file, chatIdSet)
+        return if (chatIds.isNotEmpty()) {
+            chatIds
+        } else if (file.exists()) {
+            jsonMapper.readValue(file, object : TypeReference<MutableSet<Long>>() {})
+        } else {
+            mutableSetOf()
+        }
     }
 
     @Synchronized
@@ -32,5 +30,9 @@ object ChatIdJsonFileStorage {
         var chatIdSet = findAll()
         chatIdSet.remove(chatId)
         saveAll(chatIdSet)
+    }
+
+    private fun saveAll(chatIdSet: Set<Long>) {
+        jsonMapper.writeValue(file, chatIdSet)
     }
 }

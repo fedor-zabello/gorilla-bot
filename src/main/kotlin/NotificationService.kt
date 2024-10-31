@@ -1,5 +1,3 @@
-import datastorage.ChatIdJsonFileStorage
-
 object NotificationService {
     fun notifyForUpcomingMatch(match: UpcomingMatch) {
         val subscribersChatId = ChatIdJsonFileStorage.findAll()

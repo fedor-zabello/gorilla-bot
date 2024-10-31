@@ -9,28 +9,39 @@ object GorillaBot {
     private val bot: Bot
 
     init {
+        println("Initialization of Telegram bot")
         bot = bot {
             token = System.getenv("TELEGRAM_API_KEY")
             dispatch {
                 command("start") {
-                    bot.sendMessage(chatId = ChatId.fromId(message.chat.id), text = "Горилла вперёд!")
+                    println("Received ${message.text} command")
+                    sendMessage(message.chat.id, "Горилла вперёд!")
                     SubscriptionService.subscribe(message.chat.id)
                 }
                 command("matches") {
-                    getNearestAsStrings().forEach { bot.sendMessage(chatId = ChatId.fromId(message.chat.id), text = it) }
+                    println("Received ${message.text} command")
+                    getNearestAsStrings().forEach { sendMessage(message.chat.id, it) }
                 }
                 command("subscribe") {
+                    println("Received ${message.text} command")
                     SubscriptionService.subscribe(message.chat.id)
                 }
                 command("unsubscribe") {
+                    println("Received ${message.text} command")
                     SubscriptionService.unsubscribe(message.chat.id)
                 }
             }
         }
         bot.startPolling()
+        println("Initialization of Telegram bot finished. Bot is polling.")
     }
 
     fun sendMessage(chatId: Long, text: String) {
-        bot.sendMessage(ChatId.fromId(chatId), text = text)
+        var result = bot.sendMessage(ChatId.fromId(chatId), text = text)
+        result.fold({
+            println("Message is sent to chat $chatId, userName ${it.chat.username}.")
+        }, {
+            println("ERROR: Failed to send message. Error $it.")
+        })
     }
 }

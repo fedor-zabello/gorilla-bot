@@ -20,7 +20,7 @@ object Scheduler {
     private suspend fun runNotificationChecker() = coroutineScope {
         delay(90 * 1000L)
         while (true) {
-            println("Checking database for objects to schedule notifications...")
+            println("Checking upcoming matches on spbhl...")
 
             val matches = MatchService.getAllUpcoming()
             matches.filter { match ->
@@ -35,7 +35,7 @@ object Scheduler {
                         scheduledForNotify.remove(it)
                     }
                     scheduledForNotify.add(it)
-                    println("Scheduled notification for object ID: $it with delay: $delay ms")
+                    println("Scheduled notification for match ${it.teams} at ${it.date} with delay: $delay ms")
                 }
             }
 
