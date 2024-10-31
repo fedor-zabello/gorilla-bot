@@ -1,11 +1,11 @@
+import MatchService.getNearestAsStrings
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
 
-class GorillaBot {
-    private val matchService = MatchService()
+object GorillaBot {
     private val bot: Bot
 
     init {
@@ -14,12 +14,23 @@ class GorillaBot {
             dispatch {
                 command("start") {
                     bot.sendMessage(chatId = ChatId.fromId(message.chat.id), text = "Горилла вперёд!")
+                    SubscriptionService.subscribe(message.chat.id)
                 }
                 command("matches") {
-                    matchService.getNearestAsStrings().forEach { bot.sendMessage(chatId = ChatId.fromId(message.chat.id), text = it) }
+                    getNearestAsStrings().forEach { bot.sendMessage(chatId = ChatId.fromId(message.chat.id), text = it) }
+                }
+                command("subscribe") {
+                    SubscriptionService.subscribe(message.chat.id)
+                }
+                command("unsubscribe") {
+                    SubscriptionService.unsubscribe(message.chat.id)
                 }
             }
         }
         bot.startPolling()
+    }
+
+    fun sendMessage(chatId: Long, text: String) {
+        bot.sendMessage(ChatId.fromId(chatId), text = text)
     }
 }

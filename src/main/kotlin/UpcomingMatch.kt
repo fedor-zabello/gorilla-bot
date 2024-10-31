@@ -1,8 +1,8 @@
-import java.time.ZonedDateTime
+import java.time.LocalDateTime
 
 data class UpcomingMatch (
     val tournament: String,
-    val date: ZonedDateTime,
+    val date: LocalDateTime,
     val arena: String,
     val teams: String,
 )

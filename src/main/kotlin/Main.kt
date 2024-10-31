@@ -1,3 +1,5 @@
 fun main() {
-    GorillaBot()
+    GorillaBot
+    Scheduler
+    println("application has started")
 }
