@@ -1,12 +1,12 @@
 import org.jsoup.Jsoup
-import util.MatchMapper.dtoToUpcomingMatch
+import util.MatchMapper.dtoToMatch
 import java.time.format.DateTimeFormatter
 import kotlin.collections.filter
 import kotlin.collections.map
 import kotlin.collections.take
 import kotlin.text.trimIndent
 
-object MatchService {
+class MatchService {
     private val teamIds = listOf("b82f09ec-bf65-4d64-881f-0bef1598d936", "dc079cd6-d6e2-4b12-b7fa-b8676195a081")
     private val nearestMatchesCount = 3
 
@@ -17,12 +17,17 @@ object MatchService {
             .take(nearestMatchesCount)
     }
 
-    fun getAllUpcoming():List<Match> {
-        return getAllAsDto().filter { it.score == "" }.map{ dtoToUpcomingMatch(it) }
+    fun getAllUpcoming():List<SpbhlMatch> {
+        return getAllAsDto().filter { it.score == "" }.map{ dtoToMatch(it) }
     }
 
-    fun getAll(): List<Match> {
-        return getAllAsDto().map{ dtoToUpcomingMatch(it) }
+    fun getAll(): List<SpbhlMatch> {
+        return getAllAsDto().map{ dtoToMatch(it) }
+    }
+
+    fun getLastWithResult(): String {
+        var matchDto =  getAllAsDto().filter { it.score != "" }.sortedBy { it.date }.last()
+        return getMatchMessage(dtoToMatch(matchDto))
     }
 
     private fun getAllAsDto(): List<SpbhlMatchDto> {
@@ -48,12 +53,18 @@ object MatchService {
         return matchDtoList.filter { it.teams != "" }
     }
 
-    private fun getMatchMessage(match: Match): String {
-        return """
-        ${match.teams}
-        дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
-        время: ${match.date.toLocalTime()}
-        арена: ${match.arena}
-    """.trimIndent()
+    private fun getMatchMessage(match: SpbhlMatch): String {
+        return if (match.score == "")
+            """
+            ${match.teams}
+            дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
+            время: ${match.date.toLocalTime()}
+            арена: ${match.arena}
+        """.trimIndent()
+        else """
+            ${match.teams}
+            счёт: ${match.score}
+            дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
+        """.trimIndent()
     }
 }

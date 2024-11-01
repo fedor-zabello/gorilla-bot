@@ -1,6 +1,6 @@
 import java.time.LocalDateTime
 
-data class Match (
+data class SpbhlMatch (
     val tournament: String,
     val date: LocalDateTime,
     val arena: String,

@@ -2,10 +2,12 @@ import com.fasterxml.jackson.core.type.TypeReference
 import util.CustomJacksonMapper
 import java.io.File
 
-object ChatIdJsonFileStorage {
+class ChatIdJsonFileStorage(
+    dataSource: String
+) {
     private val jsonMapper = CustomJacksonMapper.mapper
     private val chatIds = mutableSetOf<Long>()
-    private val file = File("/var/lib/gorilla-bot/chat_id.json")
+    private val file = File(dataSource)
 
     @Synchronized
     fun findAll(): MutableSet<Long> {

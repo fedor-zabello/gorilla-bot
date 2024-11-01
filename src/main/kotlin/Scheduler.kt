@@ -7,16 +7,18 @@ import util.DateTimeUtils
 import java.time.LocalDate
 import java.util.concurrent.ConcurrentHashMap
 
-object Scheduler {
-    private val scheduledForNotify = ConcurrentHashMap.newKeySet<Match>()
-    private val scheduledForCheckResult = ConcurrentHashMap.newKeySet<Match>()
+class Scheduler(
+    private val matchService: MatchService,
+    private val notificationService: NotificationService
+) {
+    private val scheduledForNotify = ConcurrentHashMap.newKeySet<SpbhlMatch>()
+    private val scheduledForCheckResult = ConcurrentHashMap.newKeySet<SpbhlMatch>()
 
-    init {
-        println("Scheduler initializing")
+    fun start() {
         CoroutineScope(Dispatchers.Default).launch {
             launch { runNotificationChecker() }
         }
-        println("Scheduler is initialized")
+        println("Scheduler is started")
     }
 
     private suspend fun runNotificationChecker() = coroutineScope {
@@ -24,7 +26,7 @@ object Scheduler {
         while (true) {
             println("Checking upcoming matches on spbhl...")
 
-            val matches = MatchService.getAllUpcoming()
+            val matches = matchService.getAllUpcoming()
 
             matches.filter { match ->
                 match.date.toLocalDate() == LocalDate.now().plusDays(1)
@@ -34,7 +36,7 @@ object Scheduler {
                 if (delay > 0) {
                     launch {
                         delay(delay)
-                        NotificationService.notifyForUpcomingMatch(it)
+                        notificationService.notifyForUpcomingMatch(it)
                         scheduledForNotify.remove(it)
                     }
                     scheduledForNotify.add(it)
@@ -52,12 +54,12 @@ object Scheduler {
                         delay(delay)
                         var scoreDiscovered = false
                         while (!scoreDiscovered) {
-                            MatchService.getAll().filter { updatedMatch ->
+                            matchService.getAll().filter { updatedMatch ->
                                 updatedMatch.teams == match.teams
                                         && updatedMatch.date == match.date
                                         && updatedMatch.score != ""
                             }.forEach {
-                                NotificationService.notifyForResult(it)
+                                notificationService.notifyForResult(it)
                                 scoreDiscovered = true
                             }
                             delay(5 * 60 * 1000)
