@@ -1,5 +1,3 @@
-package dto
-
 data class SpbhlMatchDto(
     val tournament: String,
     val date: String,

@@ -3,13 +3,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.Duration
+import util.DateTimeUtils
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.concurrent.ConcurrentHashMap
 
 object Scheduler {
-    private val scheduledForNotify = ConcurrentHashMap.newKeySet<UpcomingMatch>()
+    private val scheduledForNotify = ConcurrentHashMap.newKeySet<Match>()
+    private val scheduledForCheckResult = ConcurrentHashMap.newKeySet<Match>()
 
     init {
         println("Scheduler initializing")
@@ -25,11 +25,12 @@ object Scheduler {
             println("Checking upcoming matches on spbhl...")
 
             val matches = MatchService.getAllUpcoming()
+
             matches.filter { match ->
                 match.date.toLocalDate() == LocalDate.now().plusDays(1)
                         && !scheduledForNotify.contains(match)
             }.forEach {
-                var delay = calculateDelay(it.date)
+                var delay = DateTimeUtils.calculateDelayForNotification(it.date)
                 if (delay > 0) {
                     launch {
                         delay(delay)
@@ -41,13 +42,34 @@ object Scheduler {
                 }
             }
 
+            matches.filter { match ->
+                match.date.toLocalDate() == LocalDate.now()
+                        && !scheduledForCheckResult.contains(match)
+            }.forEach { match ->
+                var delay = DateTimeUtils.calculateDelayForScoreCheck(match.date)
+                if (delay > 0) {
+                    launch {
+                        delay(delay)
+                        var scoreDiscovered = false
+                        while (!scoreDiscovered) {
+                            MatchService.getAll().filter { updatedMatch ->
+                                updatedMatch.teams == match.teams
+                                        && updatedMatch.date == match.date
+                                        && updatedMatch.score != ""
+                            }.forEach {
+                                NotificationService.notifyForResult(it)
+                                scoreDiscovered = true
+                            }
+                            delay(5 * 60 * 1000)
+                        }
+                        scheduledForCheckResult.remove(match)
+                    }
+                    scheduledForCheckResult.add(match)
+                    println("Scheduled notification for result of the match ${match.teams} match time ${match.date} with delay: $delay ms")
+                }
+            }
+
             delay(3 * 60 * 60 * 1000) // Check every 3 hours
         }
     }
-
-    private fun calculateDelay(matchDateTime: LocalDateTime): Long {
-        var notificationTime = matchDateTime.minusDays(1).withHour(11)
-        return Duration.between(LocalDateTime.now(), notificationTime).toMillis()
-    }
-
 }

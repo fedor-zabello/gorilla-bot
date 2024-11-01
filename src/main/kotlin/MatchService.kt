@@ -1,4 +1,3 @@
-import dto.SpbhlMatchDto
 import org.jsoup.Jsoup
 import util.MatchMapper.dtoToUpcomingMatch
 import java.time.format.DateTimeFormatter
@@ -12,21 +11,24 @@ object MatchService {
     private val nearestMatchesCount = 3
 
     fun getNearestAsStrings(): List<String> {
-        return getAllUpcomingAsDto()
-            .map {dtoToUpcomingMatch(it)}
+        return getAllUpcoming()
             .sortedBy { it.date }
             .map { getMatchMessage(it) }
             .take(nearestMatchesCount)
     }
 
-    fun getAllUpcoming():List<UpcomingMatch> {
-        return getAllUpcomingAsDto().map{ dtoToUpcomingMatch(it) }
+    fun getAllUpcoming():List<Match> {
+        return getAllAsDto().filter { it.score == "" }.map{ dtoToUpcomingMatch(it) }
     }
 
-    private fun getAllUpcomingAsDto(): List<SpbhlMatchDto> {
+    fun getAll(): List<Match> {
+        return getAllAsDto().map{ dtoToUpcomingMatch(it) }
+    }
+
+    private fun getAllAsDto(): List<SpbhlMatchDto> {
         val matchDtoList = mutableListOf<SpbhlMatchDto>()
 
-        teamIds.forEach() {
+        teamIds.forEach {
             val url = "https://spbhl.ru/Schedule?TeamID=$it"
             val document = Jsoup.connect(url).get()
             val matchTable = document.select("#MatchGridView")
@@ -43,11 +45,10 @@ object MatchService {
             })
         }
 
-        return matchDtoList.filter { it.score == "" && it.teams != "" }
+        return matchDtoList.filter { it.teams != "" }
     }
 
-    private fun getMatchMessage(match: UpcomingMatch): String {
-
+    private fun getMatchMessage(match: Match): String {
         return """
         ${match.teams}
         дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
