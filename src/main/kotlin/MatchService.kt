@@ -1,10 +1,10 @@
 import org.jsoup.Jsoup
 import util.MatchMapper.dtoToMatch
-import java.time.format.DateTimeFormatter
+import util.MessageGenerator.getMatchResultMessage
+import util.MessageGenerator.getUpcomingMatchMessage
 import kotlin.collections.filter
 import kotlin.collections.map
 import kotlin.collections.take
-import kotlin.text.trimIndent
 
 class MatchService {
     private val teamIds = listOf("b82f09ec-bf65-4d64-881f-0bef1598d936", "dc079cd6-d6e2-4b12-b7fa-b8676195a081")
@@ -13,7 +13,7 @@ class MatchService {
     fun getNearestAsStrings(): List<String> {
         return getAllUpcoming()
             .sortedBy { it.date }
-            .map { getMatchMessage(it) }
+            .map { getUpcomingMatchMessage(it) }
             .take(nearestMatchesCount)
     }
 
@@ -27,7 +27,7 @@ class MatchService {
 
     fun getLastWithResult(): String {
         var matchDto =  getAllAsDto().filter { it.score != "" }.sortedBy { it.date }.last()
-        return getMatchMessage(dtoToMatch(matchDto))
+        return getMatchResultMessage(dtoToMatch(matchDto))
     }
 
     private fun getAllAsDto(): List<SpbhlMatchDto> {
@@ -51,20 +51,5 @@ class MatchService {
         }
 
         return matchDtoList.filter { it.teams != "" }
-    }
-
-    private fun getMatchMessage(match: SpbhlMatch): String {
-        return if (match.score == "")
-            """
-            ${match.teams}
-            дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
-            время: ${match.date.toLocalTime()}
-            арена: ${match.arena}
-        """.trimIndent()
-        else """
-            ${match.teams}
-            счёт: ${match.score}
-            дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
-        """.trimIndent()
     }
 }
