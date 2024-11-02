@@ -15,7 +15,7 @@ object DateTimeUtils {
     }
 
     fun calculateDelayForNotification(matchDateTime: LocalDateTime): Long {
-        var notificationTime = matchDateTime.minusDays(1).withHour(11)
+        var notificationTime = matchDateTime.minusDays(1).withHour(11).withMinute(0).withSecond(0)
         return Duration.between(LocalDateTime.now(), notificationTime).toMillis()
     }
 
