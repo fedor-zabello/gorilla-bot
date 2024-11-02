@@ -22,12 +22,16 @@ class MatchService {
     }
 
     fun getAll(): List<SpbhlMatch> {
-        return getAllAsDto().map{ dtoToMatch(it) }
+        return getAllAsDto().map{ dtoToMatch(it) }.filter{ it.score == "ABC" }
     }
 
     fun getLastWithResult(): String {
-        var matchDto =  getAllAsDto().filter { it.score != "" }.sortedBy { it.date }.last()
-        return getMatchResultMessage(dtoToMatch(matchDto))
+        val latsMatchWithResultDto = getAllAsDto()
+            .filter { it.score.isNotEmpty() }
+            .maxByOrNull { it.date }
+
+        return latsMatchWithResultDto?.let { getMatchResultMessage((dtoToMatch(it))) }
+            ?: "Не удалось определить результат последнего матча"
     }
 
     private fun getAllAsDto(): List<SpbhlMatchDto> {
