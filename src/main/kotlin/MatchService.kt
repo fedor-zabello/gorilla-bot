@@ -22,7 +22,7 @@ class MatchService {
     }
 
     fun getAll(): List<SpbhlMatch> {
-        return getAllAsDto().map{ dtoToMatch(it) }.filter{ it.score == "ABC" }
+        return getAllAsDto().map{ dtoToMatch(it) }
     }
 
     fun getLastWithResult(): String {

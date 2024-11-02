@@ -5,5 +5,5 @@ data class SpbhlMatch (
     val date: LocalDateTime,
     val arena: String,
     val teams: String,
-    val score: String,
+    val score: String?,
 )

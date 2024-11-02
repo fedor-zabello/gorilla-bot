@@ -32,7 +32,7 @@ object MessageGenerator {
 
     fun getFinishedMatchMessage(match: SpbhlMatch): String {
         var teams = match.teams.split(" - ")
-        var score = parseScore(match.score)
+        var score = parseScore(match.score!!)
         if (score == null) {
             throw IllegalArgumentException("Failed to parse score for ${match.teams}, score ${match.score}")
         }

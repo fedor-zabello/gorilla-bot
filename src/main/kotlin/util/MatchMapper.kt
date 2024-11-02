@@ -10,7 +10,7 @@ object MatchMapper {
         val date = parseToLocalDateTime(dto.date, dto.time)
         val arena = dto.arena
         val teams = dto.teams
-        val score = dto.score
+        val score = if (dto.score.isNotEmpty()) dto.score else null
         return SpbhlMatch(tournament, date, arena, teams, score)
     }
 }
