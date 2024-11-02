@@ -22,7 +22,7 @@ object MessageGenerator {
 
     fun getNotificationForUpcomingMatch(match: SpbhlMatch): String {
         return """
-            *Завтра игра!*
+            *Завтра игра\!*
             ${match.teams}
             дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
             время: ${match.date.toLocalTime()}
