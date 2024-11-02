@@ -5,29 +5,29 @@ import java.time.format.DateTimeFormatter
 object MessageGenerator {
     fun getMatchResultMessage(match: SpbhlMatch): String {
         return """
-            ${match.teams}
+            *${match.teams}*
             счёт: ${match.score}
             дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
-        """.trimIndent()
+        """.trimIndent().replace("-", "\\-")
     }
 
     fun getUpcomingMatchMessage(match: SpbhlMatch): String {
         return """
-            ${match.teams}
+            *${match.teams}*
             дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
             время: ${match.date.toLocalTime()}
             арена: ${match.arena}
-        """.trimIndent()
+        """.trimIndent().replace("-", "\\-")
     }
 
     fun getNotificationForUpcomingMatch(match: SpbhlMatch): String {
         return """
-            Завтра игра!
+            *Завтра игра!*
             ${match.teams}
             дата: ${match.date.toLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))}
             время: ${match.date.toLocalTime()}
             арена: ${match.arena}
-        """.trimIndent()
+        """.trimIndent().replace("-", "\\-")
     }
 
     fun getFinishedMatchMessage(match: SpbhlMatch): String {
@@ -43,24 +43,24 @@ object MessageGenerator {
 
         if (homeTeamScore == awayTeamScore) {
             return """
-                Ничья
+                *__Ничья__*
                 ${match.teams}
                 счёт: ${match.score}
-            """.trimIndent()
+            """.trimIndent().replace("-", "\\-")
         } else if (homeTeamScore > awayTeamScore && homeTeam.contains("Горилла")
             || awayTeamScore > homeTeamScore && awayTeam.contains("Горилла")
         ) {
             return """
-                Победа
+                *__Победа__*
                 ${match.teams}
                 счёт: ${match.score}
-            """.trimIndent()
+            """.trimIndent().replace("-", "\\-")
         } else {
             return """
-                Поражение
+                *__Поражение__*
                 ${match.teams}
                 счёт: ${match.score}
-            """.trimIndent()
+            """.trimIndent().replace("-", "\\-")
         }
     }
 

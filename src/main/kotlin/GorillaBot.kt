@@ -3,6 +3,7 @@ import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.ParseMode.MARKDOWN_V2
 
 class GorillaBot(
     private val subscriptionService: SubscriptionService,
@@ -43,7 +44,10 @@ class GorillaBot(
     }
 
     fun sendMessage(chatId: Long, text: String) {
-        var result = bot.sendMessage(ChatId.fromId(chatId), text = text)
+        var result = bot.sendMessage(
+            chatId = ChatId.fromId(chatId),
+            text = text,
+            parseMode = MARKDOWN_V2,)
         result.fold({
             println("Message is sent to chat $chatId, userName ${it.chat.username}.")
         }, {
