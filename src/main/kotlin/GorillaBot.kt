@@ -4,6 +4,7 @@ import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.ParseMode.MARKDOWN_V2
+import com.github.kotlintelegrambot.entities.TelegramFile
 
 class GorillaBot(
     private val subscriptionService: SubscriptionService,
@@ -53,5 +54,14 @@ class GorillaBot(
         }, {
             println("ERROR: Failed to send message. Error $it.")
         })
+    }
+
+    fun sendGifSilently(chatId: Long, gifSrc: String) {
+        val telegramFile = TelegramFile.ByUrl(gifSrc)
+        bot.sendAnimation(
+            chatId = ChatId.fromId(chatId),
+            animation = telegramFile,
+            disableNotification = true)
+
     }
 }

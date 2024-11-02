@@ -14,7 +14,8 @@ class ChatIdJsonFileStorage(
         return if (chatIds.isNotEmpty()) {
             chatIds
         } else if (file.exists()) {
-            jsonMapper.readValue(file, object : TypeReference<MutableSet<Long>>() {})
+            chatIds.addAll(jsonMapper.readValue(file, object : TypeReference<MutableSet<Long>>() {}))
+            chatIds
         } else {
             mutableSetOf()
         }
