@@ -64,6 +64,5 @@ class GorillaBot(
             chatId = ChatId.fromId(chatId),
             animation = telegramFile,
             disableNotification = true)
-
     }
 }

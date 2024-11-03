@@ -17,7 +17,7 @@ class SpbhlMatchResultMapperTest {
             "Горилла - Самураи Старт",
             "4 : 1"
         )
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         assertEquals(4 to 1, matchResult.score)
         assertEquals("Горилла" to "Самураи Старт", matchResult.teams)
@@ -34,7 +34,7 @@ class SpbhlMatchResultMapperTest {
             "Алмаз - Горилла",
             "2 : 3"
         )
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         assertEquals(2 to 3, matchResult.score)
         assertEquals("Алмаз" to "Горилла", matchResult.teams)
@@ -51,7 +51,7 @@ class SpbhlMatchResultMapperTest {
             "Sharks Старт - Горилла-2",
             "3 : 1"
         )
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         assertEquals(3 to 1, matchResult.score)
         assertEquals("Sharks Старт" to "Горилла-2", matchResult.teams)
@@ -68,7 +68,7 @@ class SpbhlMatchResultMapperTest {
             "Горилла - Кронверк",
             "2 : 4"
         )
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         assertEquals(2 to 4, matchResult.score)
         assertEquals("Горилла" to "Кронверк", matchResult.teams)
@@ -85,7 +85,7 @@ class SpbhlMatchResultMapperTest {
             "Горилла - Кронверк",
             "4 : 4"
         )
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         assertEquals(4 to 4, matchResult.score)
         assertEquals("Горилла" to "Кронверк", matchResult.teams)
@@ -102,7 +102,7 @@ class SpbhlMatchResultMapperTest {
             "Ижорский батальон-2 - Горилла",
             "2 : 3ПБ"
         )
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         assertEquals(2 to 3, matchResult.score)
         assertEquals("Ижорский батальон-2" to "Горилла", matchResult.teams)
@@ -119,7 +119,7 @@ class SpbhlMatchResultMapperTest {
             "Ижорский батальон-2 - Горилла",
             "0 : 5ОТ"
         )
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         assertEquals(0 to 5, matchResult.score)
         assertEquals("Ижорский батальон-2" to "Горилла", matchResult.teams)
@@ -136,7 +136,7 @@ class SpbhlMatchResultMapperTest {
             "Ижорский батальон-2 - Горилла",
             "9 : 27"
         )
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         assertEquals(9 to 27, matchResult.score)
         assertEquals("Ижорский батальон-2" to "Горилла", matchResult.teams)

@@ -3,9 +3,9 @@ package service
 import model.SpbhlMatch
 import model.SpbhlMatchDto
 import org.jsoup.Jsoup
-import util.SpbhlMatchMapper.dtoToMatch
 import util.MessageGenerator.getMatchResultMessage
 import util.MessageGenerator.getUpcomingMatchMessage
+import util.SpbhlMatchMapper.dtoToSpbhlMatch
 import kotlin.collections.filter
 import kotlin.collections.map
 import kotlin.collections.take
@@ -22,11 +22,11 @@ class MatchService {
     }
 
     fun getAllUpcoming():List<SpbhlMatch> {
-        return getAllAsDto().filter { it.score == "" }.map{ dtoToMatch(it) }
+        return getAllAsDto().filter { it.score == "" }.map{ dtoToSpbhlMatch(it) }
     }
 
     fun getAll(): List<SpbhlMatch> {
-        return getAllAsDto().map{ dtoToMatch(it) }
+        return getAllAsDto().map{ dtoToSpbhlMatch(it) }
     }
 
     fun getLastWithResult(): String {
@@ -34,7 +34,7 @@ class MatchService {
             .filter { it.score.isNotEmpty() }
             .maxByOrNull { it.date }
 
-        return latsMatchWithResultDto?.let { getMatchResultMessage((dtoToMatch(it))) }
+        return latsMatchWithResultDto?.let { getMatchResultMessage((dtoToSpbhlMatch(it))) }
             ?: "Не удалось определить результат последнего матча"
     }
 

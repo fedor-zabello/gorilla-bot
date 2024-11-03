@@ -7,7 +7,7 @@ import util.MessageGenerator.getDefeatMessage
 import util.MessageGenerator.getDrawMessage
 import util.MessageGenerator.getGorillaWonMessage
 import util.MessageGenerator.getNotificationForUpcomingMatch
-import util.SpbhlMatchResultMapper
+import util.SpbhlMatchMapper
 
 class NotificationService(
     private val chatIdJsonFileStorage: ChatIdRepository,
@@ -23,7 +23,7 @@ class NotificationService(
 
     fun notifyForResult(match: SpbhlMatch) {
         match.score ?: return
-        val matchResult = SpbhlMatchResultMapper.spbhlMatchToMatchResult(match)
+        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         var gifUrl: String? = null
         val message = when {
