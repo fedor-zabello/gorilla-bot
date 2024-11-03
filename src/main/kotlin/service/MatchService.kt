@@ -1,5 +1,9 @@
+package service
+
+import model.SpbhlMatch
+import model.SpbhlMatchDto
 import org.jsoup.Jsoup
-import util.MatchMapper.dtoToMatch
+import util.SpbhlMatchMapper.dtoToMatch
 import util.MessageGenerator.getMatchResultMessage
 import util.MessageGenerator.getUpcomingMatchMessage
 import kotlin.collections.filter

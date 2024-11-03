@@ -5,6 +5,8 @@ import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.ParseMode.MARKDOWN_V2
 import com.github.kotlintelegrambot.entities.TelegramFile
+import service.MatchService
+import service.SubscriptionService
 
 class GorillaBot(
     private val subscriptionService: SubscriptionService,

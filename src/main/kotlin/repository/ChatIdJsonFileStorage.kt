@@ -1,16 +1,18 @@
+package repository
+
 import com.fasterxml.jackson.core.type.TypeReference
 import util.CustomJacksonMapper
 import java.io.File
 
 class ChatIdJsonFileStorage(
     dataSource: String
-) {
+): ChatIdRepository {
     private val jsonMapper = CustomJacksonMapper.mapper
     private val chatIds = mutableSetOf<Long>()
     private val file = File(dataSource)
 
     @Synchronized
-    fun findAll(): MutableSet<Long> {
+    override fun findAll(): MutableSet<Long> {
         return if (chatIds.isNotEmpty()) {
             chatIds
         } else if (file.exists()) {
@@ -22,14 +24,14 @@ class ChatIdJsonFileStorage(
     }
 
     @Synchronized
-    fun save(chatId: Long) {
+    override fun save(chatId: Long) {
         var chatIdSet = findAll()
         chatIdSet.add(chatId)
         saveAll(chatIdSet)
     }
 
     @Synchronized
-    fun delete(chatId: Long) {
+    override fun delete(chatId: Long) {
         var chatIdSet = findAll()
         chatIdSet.remove(chatId)
         saveAll(chatIdSet)

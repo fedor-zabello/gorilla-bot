@@ -1,3 +1,9 @@
+import repository.ChatIdJsonFileStorage
+import repository.GifStorage
+import service.MatchService
+import service.NotificationService
+import service.SubscriptionService
+
 fun main() {
     val chatIdJsonFileStorage = ChatIdJsonFileStorage("/var/lib/gorilla-bot/chat_id.json")
     val gifStorage = GifStorage(

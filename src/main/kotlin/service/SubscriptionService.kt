@@ -1,5 +1,9 @@
+package service
+
+import repository.ChatIdRepository
+
 class SubscriptionService(
-    val chatIdJsonFileStorage: ChatIdJsonFileStorage
+    val chatIdJsonFileStorage: ChatIdRepository
 ) {
     fun subscribe(chatId: Long) {
         println("Saving chat $chatId for subscription")

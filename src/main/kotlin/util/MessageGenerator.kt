@@ -1,5 +1,6 @@
 package util
 
+import model.SpbhlMatch
 import java.time.format.DateTimeFormatter
 
 object MessageGenerator {
@@ -30,47 +31,23 @@ object MessageGenerator {
         """.trimIndent().replace("-", "\\-")
     }
 
-    fun getFinishedMatchMessage(match: SpbhlMatch): String {
-        var teams = match.teams.split(" - ")
-        var score = parseScore(match.score!!)
-        if (score == null) {
-            throw IllegalArgumentException("Failed to parse score for ${match.teams}, score ${match.score}")
-        }
-        var homeTeam = teams[0]
-        var awayTeam = teams[1]
-        var homeTeamScore = score.first
-        var awayTeamScore = score.second
-
-        if (homeTeamScore == awayTeamScore) {
-            return """
-                *__Ничья__*
-                ${match.teams}
-                счёт: ${match.score}
-            """.trimIndent().replace("-", "\\-")
-        } else if (homeTeamScore > awayTeamScore && homeTeam.contains("Горилла")
-            || awayTeamScore > homeTeamScore && awayTeam.contains("Горилла")
-        ) {
-            return """
-                *__Победа__*
-                ${match.teams}
-                счёт: ${match.score}
-            """.trimIndent().replace("-", "\\-")
-        } else {
-            return """
-                *__Поражение__*
-                ${match.teams}
-                счёт: ${match.score}
-            """.trimIndent().replace("-", "\\-")
-        }
+    fun getGorillaWonMessage(match: SpbhlMatch): String {
+        return getMessageForEndedMatch(match, "*__Победа__*")
     }
 
-    private fun parseScore(score: String): Pair<Int, Int>? {
-        val regexp = Regex("""(\d+)\s*:\s*(\d+)""")
-        val matchResult = regexp.find(score)
+    fun getDrawMessage(match: SpbhlMatch): String {
+        return getMessageForEndedMatch(match, "*__Ничья__*")
+    }
 
-        return matchResult?.let {
-            val (homeTeamScore, awayTeamScore) = it.destructured
-            homeTeamScore.toInt() to awayTeamScore.toInt()
-        }
+    fun getDefeatMessage(match: SpbhlMatch): String {
+        return getMessageForEndedMatch(match, "*__Поражение__*")
+    }
+
+    private fun getMessageForEndedMatch(match: SpbhlMatch, result: String): String {
+        return """
+            $result
+            ${match.teams}
+            счёт: ${match.score}
+        """.trimIndent().replace("-", "\\-")
     }
 }

@@ -1,3 +1,5 @@
+package model
+
 data class SpbhlMatchDto(
     val tournament: String,
     val date: String,
