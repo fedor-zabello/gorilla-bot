@@ -44,7 +44,11 @@ class Scheduler(
                     scheduledForNotify.add(match)
                     launch {
                         delay(notificationDelay)
-                        notificationService.notifyForUpcomingMatch(match)
+                        try {
+                            notificationService.notifyForUpcomingMatch(match)
+                        } catch (e: Exception) {
+                            notificationService.notifyAdmin("Error while trying to notify for upcoming match. Match $match. Error: ${e.message}")
+                        }
                         scheduledForNotify.remove(match)
                     }
                     println("Scheduled notification for match ${match.teams} at ${match.date} with delay: $notificationDelay ms")
@@ -65,7 +69,11 @@ class Scheduler(
                     scheduledForCheckResult.add(match)
                     launch {
                         delay(resultCheckDelay)
-                        checkForScoreUpdates(match)
+                        try {
+                            checkForScoreUpdates(match)
+                        } catch (e: Exception) {
+                            notificationService.notifyAdmin("Error while trying to check and send match score. Match $match. Error: ${e.message}")
+                        }
                         scheduledForCheckResult.remove(match)
                     }
                     println("Scheduled result check for match ${match.teams} at ${match.date} with delay: $resultCheckDelay ms")

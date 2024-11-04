@@ -14,6 +14,8 @@ class NotificationService(
     private val gorillaBot: GorillaBot,
     private val gifStorage: GifStorage
 ) {
+    private val adminChatId = 127845863L
+
     fun notifyForUpcomingMatch(match: SpbhlMatch) {
         val message = getNotificationForUpcomingMatch(match)
         val gifUrl = gifStorage.findAnyUpcomingGifUrl()
@@ -36,6 +38,10 @@ class NotificationService(
         }
 
         notifySubscribers(message, gifUrl)
+    }
+
+    fun notifyAdmin(message: String) {
+        gorillaBot.sendMessage(adminChatId, message)
     }
 
     private fun notifySubscribers(message: String, gifUrl: String?) {
