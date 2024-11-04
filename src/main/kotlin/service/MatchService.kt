@@ -3,38 +3,41 @@ package service
 import model.SpbhlMatch
 import model.SpbhlMatchDto
 import org.jsoup.Jsoup
-import util.MessageGenerator.getMatchResultMessage
-import util.MessageGenerator.getUpcomingMatchMessage
-import util.SpbhlMatchMapper.dtoToSpbhlMatch
+import util.MessageGenerator
+import util.SpbhlMatchMapper
 import kotlin.collections.filter
 import kotlin.collections.map
 import kotlin.collections.take
 
-class MatchService {
+class MatchService(
+    private val spbhlMatchMapper: SpbhlMatchMapper,
+    private val messageGenerator: MessageGenerator
+) {
     private val teamIds = listOf("b82f09ec-bf65-4d64-881f-0bef1598d936", "dc079cd6-d6e2-4b12-b7fa-b8676195a081")
     private val nearestMatchesCount = 3
 
     fun getNearestAsStrings(): List<String> {
         return getAllUpcoming()
             .sortedBy { it.date }
-            .map { getUpcomingMatchMessage(it) }
+            .map { messageGenerator.getUpcomingMatchMessage(it) }
             .take(nearestMatchesCount)
     }
 
     fun getAllUpcoming():List<SpbhlMatch> {
-        return getAllAsDto().filter { it.score == "" }.map{ dtoToSpbhlMatch(it) }
+        return getAllAsDto().filter { it.score == "" }.map{ spbhlMatchMapper.dtoToSpbhlMatch(it) }
     }
 
     fun getAll(): List<SpbhlMatch> {
-        return getAllAsDto().map{ dtoToSpbhlMatch(it) }
+        return getAllAsDto().map{ spbhlMatchMapper.dtoToSpbhlMatch(it) }
     }
 
     fun getLastWithResult(): String {
         val latsMatchWithResultDto = getAllAsDto()
             .filter { it.score.isNotEmpty() }
+            .map{ spbhlMatchMapper.dtoToSpbhlMatch(it) }
             .maxByOrNull { it.date }
 
-        return latsMatchWithResultDto?.let { getMatchResultMessage((dtoToSpbhlMatch(it))) }
+        return latsMatchWithResultDto?.let { messageGenerator.getMatchResultMessage(it) }
             ?: "Не удалось определить результат последнего матча"
     }
 

@@ -6,6 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MessageGeneratorTest {
+    private val messageGenerator = MessageGenerator()
     @Test
     fun `Message for victory`() {
         val match = SpbhlMatch(
@@ -16,7 +17,7 @@ class MessageGeneratorTest {
             "4 : 1"
         )
 
-        val message = MessageGenerator.getGorillaWonMessage(match)
+        val message = messageGenerator.getGorillaWonMessage(match)
 
         val expected = """
             *__Победа__*
@@ -36,7 +37,7 @@ class MessageGeneratorTest {
             "2 : 4"
         )
 
-        val message = MessageGenerator.getDefeatMessage(match)
+        val message = messageGenerator.getDefeatMessage(match)
 
         val expected = """
             *__Поражение__*
@@ -56,7 +57,7 @@ class MessageGeneratorTest {
             "4 : 4"
         )
 
-        val message = MessageGenerator.getDrawMessage(match)
+        val message = messageGenerator.getDrawMessage(match)
 
         val expected = """
             *__Ничья__*

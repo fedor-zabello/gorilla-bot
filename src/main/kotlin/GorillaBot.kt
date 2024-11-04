@@ -11,7 +11,8 @@ import util.MessageGenerator
 
 class GorillaBot(
     private val subscriptionService: SubscriptionService,
-    private val matchService: MatchService
+    private val matchService: MatchService,
+    private val messageGenerator: MessageGenerator
 ) {
     private val bot: Bot
 
@@ -23,7 +24,7 @@ class GorillaBot(
                 command("start") {
                     println("Received ${message.text} command")
                     sendMessage(message.chat.id, "Горилла вперёд! \uD83E\uDD8D")
-                    sendMessage(message.chat.id, MessageGenerator.getGreetingMessage())
+                    sendMessage(message.chat.id, messageGenerator.getGreetingMessage())
                     subscriptionService.subscribe(message.chat.id)
                 }
                 command("upcoming") {

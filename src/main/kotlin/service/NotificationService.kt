@@ -3,21 +3,20 @@ package service
 import model.SpbhlMatch
 import repository.ChatIdRepository
 import repository.GifStorage
-import util.MessageGenerator.getDefeatMessage
-import util.MessageGenerator.getDrawMessage
-import util.MessageGenerator.getGorillaWonMessage
-import util.MessageGenerator.getNotificationForUpcomingMatch
+import util.MessageGenerator
 import util.SpbhlMatchMapper
 
 class NotificationService(
     private val chatIdJsonFileStorage: ChatIdRepository,
     private val gorillaBot: GorillaBot,
-    private val gifStorage: GifStorage
+    private val gifStorage: GifStorage,
+    private val spbhlMatchMapper: SpbhlMatchMapper,
+    private val messageGenerator: MessageGenerator
 ) {
     private val adminChatId = 127845863L
 
     fun notifyForUpcomingMatch(match: SpbhlMatch) {
-        val message = getNotificationForUpcomingMatch(match)
+        val message = messageGenerator.getNotificationForUpcomingMatch(match)
         val gifUrl = gifStorage.findAnyUpcomingGifUrl()
 
         notifySubscribers(message, gifUrl)
@@ -25,16 +24,16 @@ class NotificationService(
 
     fun notifyForResult(match: SpbhlMatch) {
         match.score ?: return
-        val matchResult = SpbhlMatchMapper.spbhlMatchToMatchResult(match)
+        val matchResult = spbhlMatchMapper.spbhlMatchToMatchResult(match)
 
         var gifUrl: String? = null
         val message = when {
             matchResult.gorillaWon() -> {
                 gifUrl = gifStorage.findAnyWinUrl()
-                getGorillaWonMessage(match)
+                messageGenerator.getGorillaWonMessage(match)
             }
-            matchResult.isDraw() -> getDrawMessage(match)
-            else -> getDefeatMessage(match)
+            matchResult.isDraw() -> messageGenerator.getDrawMessage(match)
+            else -> messageGenerator.getDefeatMessage(match)
         }
 
         notifySubscribers(message, gifUrl)

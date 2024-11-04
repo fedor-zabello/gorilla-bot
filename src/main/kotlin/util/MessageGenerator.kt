@@ -3,7 +3,7 @@ package util
 import model.SpbhlMatch
 import java.time.format.DateTimeFormatter
 
-object MessageGenerator {
+class MessageGenerator {
     fun getGreetingMessage(): String {
         return """
             Что умеет этот бот: 

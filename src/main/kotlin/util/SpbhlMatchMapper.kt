@@ -5,7 +5,7 @@ import model.SpbhlMatchDto
 import model.SpbhlMatchResult
 import util.DateTimeUtils.parseToLocalDateTime
 
-object SpbhlMatchMapper {
+class SpbhlMatchMapper {
     fun dtoToSpbhlMatch(dto: SpbhlMatchDto): SpbhlMatch {
         val tournament = dto.tournament
         val date = parseToLocalDateTime(dto.date, dto.time)
