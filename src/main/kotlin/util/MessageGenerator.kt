@@ -4,6 +4,18 @@ import model.SpbhlMatch
 import java.time.format.DateTimeFormatter
 
 object MessageGenerator {
+    fun getGreetingMessage(): String {
+        return """
+            Что умеет этот бот: 
+            - показывает три ближайших матча команд Горилла и Горилла-2
+            - показывает результат последней игры
+            - уведомляет о предстоящей игре
+            - уведомляет о результатах завершившегося матча
+            По умолчанию уведомления включены. Их можно отключить командой `unsubscribe`.
+            Все данные с сайта [https://spbhl.ru](https://spbhl.ru/)
+        """.trimIndent().replace("-", "\\-").replace(".", "\\.")
+    }
+
     fun getMatchResultMessage(match: SpbhlMatch): String {
         return """
             *${match.teams}*

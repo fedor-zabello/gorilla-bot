@@ -7,6 +7,7 @@ import com.github.kotlintelegrambot.entities.ParseMode.MARKDOWN_V2
 import com.github.kotlintelegrambot.entities.TelegramFile
 import service.MatchService
 import service.SubscriptionService
+import util.MessageGenerator
 
 class GorillaBot(
     private val subscriptionService: SubscriptionService,
@@ -21,7 +22,8 @@ class GorillaBot(
             dispatch {
                 command("start") {
                     println("Received ${message.text} command")
-                    sendMessage(message.chat.id, "Горилла вперёд!")
+                    sendMessage(message.chat.id, "Горилла вперёд! \uD83E\uDD8D")
+                    sendMessage(message.chat.id, MessageGenerator.getGreetingMessage())
                     subscriptionService.subscribe(message.chat.id)
                 }
                 command("upcoming") {
@@ -35,10 +37,12 @@ class GorillaBot(
                 command("subscribe") {
                     println("Received ${message.text} command")
                     subscriptionService.subscribe(message.chat.id)
+                    sendMessage(message.chat.id, "Бот будет присылать уведомления об играх")
                 }
                 command("unsubscribe") {
                     println("Received ${message.text} command")
                     subscriptionService.unsubscribe(message.chat.id)
+                    sendMessage(message.chat.id, "Уведомления отключены")
                 }
             }
         }
