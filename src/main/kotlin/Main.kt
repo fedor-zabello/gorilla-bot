@@ -2,6 +2,7 @@ import repository.ChatIdJsonFileStorage
 import repository.GifStorage
 import service.MatchService
 import service.NotificationService
+import service.SpbhClient
 import service.SubscriptionService
 import util.MessageGenerator
 import util.SpbhlMatchMapper
@@ -15,7 +16,8 @@ fun main() {
 
     val messageGenerator = MessageGenerator()
     val spbhlMatchMapper = SpbhlMatchMapper()
-    val matchService = MatchService(spbhlMatchMapper, messageGenerator)
+    val spbhClient = SpbhClient()
+    val matchService = MatchService(spbhlMatchMapper, messageGenerator, spbhClient)
     val subscriptionService = SubscriptionService(chatIdJsonFileStorage)
     val gorillaBot = GorillaBot(subscriptionService, matchService, messageGenerator)
     val notificationService = NotificationService(chatIdJsonFileStorage, gorillaBot, gifStorage, spbhlMatchMapper, messageGenerator)

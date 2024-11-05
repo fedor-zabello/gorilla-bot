@@ -35,10 +35,6 @@ class NotificationServiceTest {
     @BeforeEach
     fun init() {
         every { chatIdJsonFileStorage.findAll() } returns chatIsSet
-
-
-
-
         every {gorillaBot.sendGifSilently(any(), any())} just Runs
         every {gorillaBot.sendMessage(any(), any())} just Runs
     }
@@ -81,7 +77,7 @@ class NotificationServiceTest {
 
         every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
         every { gifStorage.findAnyWinUrl() } returns gifUrl
-        every { messageGenerator.getGorillaWonMessage(any()) } returns message
+        every { messageGenerator.getGorillaWonMessage(match) } returns message
 
         notificationService.notifyForResult(match)
 
@@ -90,6 +86,66 @@ class NotificationServiceTest {
             verify(exactly = 1) { gorillaBot.sendGifSilently(chatId, gifUrl) }
             verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
         }
+    }
 
+    @Test
+    fun `Test notify for draw`() {
+        val match = SpbhlMatch(
+            "TSP CUP - 2024 (Старт A) Групповой этап",
+            LocalDateTime.now().plusDays(1),
+            "ОЗЦ",
+            "Горилла - Самураи Старт",
+            "4 - 4"
+        )
+        val result = SpbhlMatchResult("Горилла" to "Самураи Старт", 4 to 4)
+        val message = "It's a draw"
+        val gifUrl = "https://gif.com"
+
+        every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
+        every { gifStorage.findAnyWinUrl() } returns gifUrl
+        every { messageGenerator.getDrawMessage(match) } returns message
+
+        notificationService.notifyForResult(match)
+
+        verify(exactly = 1) { messageGenerator.getDrawMessage(match) }
+        chatIsSet.forEach { chatId ->
+            verify(exactly = 0) { gorillaBot.sendGifSilently(chatId, gifUrl) }
+            verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
+        }
+    }
+
+    @Test
+    fun `Test notify for defeat`() {
+        val match = SpbhlMatch(
+            "TSP CUP - 2024 (Старт A) Групповой этап",
+            LocalDateTime.now().plusDays(1),
+            "ОЗЦ",
+            "Горилла - Самураи Старт",
+            "2 - 4"
+        )
+        val result = SpbhlMatchResult("Горилла" to "Самураи Старт", 2 to 4)
+        val message = "defeat"
+        val gifUrl = "https://gif.com"
+
+        every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
+        every { gifStorage.findAnyWinUrl() } returns gifUrl
+        every { messageGenerator.getDefeatMessage(match) } returns message
+
+        notificationService.notifyForResult(match)
+
+        verify(exactly = 1) { messageGenerator.getDefeatMessage(match) }
+        chatIsSet.forEach { chatId ->
+            verify(exactly = 0) { gorillaBot.sendGifSilently(chatId, gifUrl) }
+            verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
+        }
+    }
+
+    @Test
+    fun `Test admin notification`() {
+        val message = "something happened"
+
+        notificationService.notifyAdmin(message)
+
+        verify { gorillaBot.sendMessage(127845863L, message)}
     }
 }
