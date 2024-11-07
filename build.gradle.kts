@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.pigletsinc"
-version = "1.6-SNAPSHOT"
+version = "1.7-SNAPSHOT"
 
 repositories {
     mavenCentral()

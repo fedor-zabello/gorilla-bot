@@ -7,6 +7,7 @@ import kotlin.test.assertEquals
 
 class MessageGeneratorTest {
     private val messageGenerator = MessageGenerator()
+
     @Test
     fun `Message for victory`() {
         val match = SpbhlMatch(

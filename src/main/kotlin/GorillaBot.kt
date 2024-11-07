@@ -55,7 +55,8 @@ class GorillaBot(
         var result = bot.sendMessage(
             chatId = ChatId.fromId(chatId),
             text = text,
-            parseMode = MARKDOWN_V2,)
+            parseMode = MARKDOWN_V2,
+        )
         result.fold({
             println("Message is sent to chat $chatId, userName ${it.chat.username}.")
         }, {
@@ -68,6 +69,7 @@ class GorillaBot(
         bot.sendAnimation(
             chatId = ChatId.fromId(chatId),
             animation = telegramFile,
-            disableNotification = true)
+            disableNotification = true
+        )
     }
 }

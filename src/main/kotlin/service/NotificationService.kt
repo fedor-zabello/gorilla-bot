@@ -32,6 +32,7 @@ class NotificationService(
                 gifUrl = gifStorage.findAnyWinUrl()
                 messageGenerator.getGorillaWonMessage(match)
             }
+
             matchResult.isDraw() -> messageGenerator.getDrawMessage(match)
             else -> messageGenerator.getDefeatMessage(match)
         }

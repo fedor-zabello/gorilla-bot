@@ -35,8 +35,8 @@ class NotificationServiceTest {
     @BeforeEach
     fun init() {
         every { chatIdJsonFileStorage.findAll() } returns chatIsSet
-        every {gorillaBot.sendGifSilently(any(), any())} just Runs
-        every {gorillaBot.sendMessage(any(), any())} just Runs
+        every { gorillaBot.sendGifSilently(any(), any()) } just Runs
+        every { gorillaBot.sendMessage(any(), any()) } just Runs
     }
 
     @Test
@@ -57,7 +57,7 @@ class NotificationServiceTest {
         notificationService.notifyForUpcomingMatch(match)
 
         chatIsSet.forEach { chatId ->
-            verify(exactly = 1) {gorillaBot.sendGifSilently(chatId, gifUrl)}
+            verify(exactly = 1) { gorillaBot.sendGifSilently(chatId, gifUrl) }
             verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
         }
     }
@@ -146,6 +146,6 @@ class NotificationServiceTest {
 
         notificationService.notifyAdmin(message)
 
-        verify { gorillaBot.sendMessage(127845863L, message)}
+        verify { gorillaBot.sendMessage(127845863L, message) }
     }
 }

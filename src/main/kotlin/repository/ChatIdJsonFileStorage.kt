@@ -6,7 +6,7 @@ import java.io.File
 
 class ChatIdJsonFileStorage(
     dataSource: String
-): ChatIdRepository {
+) : ChatIdRepository {
     private val jsonMapper = CustomJacksonMapper.mapper
     private val chatIds = mutableSetOf<Long>()
     private val file = File(dataSource)

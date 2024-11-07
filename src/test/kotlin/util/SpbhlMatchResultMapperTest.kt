@@ -9,6 +9,7 @@ import kotlin.test.assertTrue
 
 class SpbhlMatchResultMapperTest {
     private val spbhlMatchMapper = SpbhlMatchMapper()
+
     @Test
     fun `Home victory`() {
         val match = SpbhlMatch(

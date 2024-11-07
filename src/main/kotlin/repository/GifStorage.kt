@@ -12,8 +12,16 @@ class GifStorage(
     private val upcomingGifUrls = mutableListOf<String>()
 
     init {
-        winGifUrls.addAll(CustomJacksonMapper.mapper.readValue(File(winGifsPath), object : TypeReference<MutableList<String>>() {}))
-        upcomingGifUrls.addAll(CustomJacksonMapper.mapper.readValue(File(upcomingGameGifsPath), object : TypeReference<MutableSet<String>>() {}))
+        winGifUrls.addAll(
+            CustomJacksonMapper.mapper.readValue(
+                File(winGifsPath),
+                object : TypeReference<MutableList<String>>() {})
+        )
+        upcomingGifUrls.addAll(
+            CustomJacksonMapper.mapper.readValue(
+                File(upcomingGameGifsPath),
+                object : TypeReference<MutableSet<String>>() {})
+        )
     }
 
     fun findAnyWinUrl(): String {

@@ -10,6 +10,7 @@ class SubscriptionService(
         chatIdJsonFileStorage.save(chatId)
         println("Chat $chatId saved")
     }
+
     fun unsubscribe(chatId: Long) {
         println("Deleting chat $chatId from subscription")
         chatIdJsonFileStorage.delete(chatId)

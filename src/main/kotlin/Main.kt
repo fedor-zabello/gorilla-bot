@@ -20,7 +20,8 @@ fun main() {
     val matchService = MatchService(spbhlMatchMapper, messageGenerator, spbhClient)
     val subscriptionService = SubscriptionService(chatIdJsonFileStorage)
     val gorillaBot = GorillaBot(subscriptionService, matchService, messageGenerator)
-    val notificationService = NotificationService(chatIdJsonFileStorage, gorillaBot, gifStorage, spbhlMatchMapper, messageGenerator)
+    val notificationService =
+        NotificationService(chatIdJsonFileStorage, gorillaBot, gifStorage, spbhlMatchMapper, messageGenerator)
     val scheduler = Scheduler(matchService, notificationService)
 
     scheduler.start()
