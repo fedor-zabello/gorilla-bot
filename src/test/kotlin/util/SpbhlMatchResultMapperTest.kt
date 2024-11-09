@@ -1,7 +1,9 @@
 package util
 
 import model.SpbhlMatch
+import model.SpbhlMatchDto
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import java.time.LocalDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -144,5 +146,19 @@ class SpbhlMatchResultMapperTest {
         assertEquals("Ижорский батальон-2" to "Горилла", matchResult.teams)
         assertTrue(matchResult.gorillaWon())
         assertFalse(matchResult.isDraw())
+    }
+
+    @Test
+    fun `Should not throw exception on mapping failed`() {
+        val matchDto = SpbhlMatchDto(
+            "TSP CUP - 2024 (Старт A) Групповой этап",
+            "Перенос",
+            "",
+            "",
+            "Ижорский батальон-2 - Горилла",
+            ""
+        )
+
+        assertDoesNotThrow { spbhlMatchMapper.dtoToSpbhlMatch(matchDto) }
     }
 }

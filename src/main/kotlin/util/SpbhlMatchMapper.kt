@@ -6,13 +6,18 @@ import model.SpbhlMatchResult
 import util.DateTimeUtils.parseToLocalDateTime
 
 class SpbhlMatchMapper {
-    fun dtoToSpbhlMatch(dto: SpbhlMatchDto): SpbhlMatch {
-        val tournament = dto.tournament
-        val date = parseToLocalDateTime(dto.date, dto.time)
-        val arena = dto.arena
-        val teams = dto.teams
-        val score = if (dto.score.isNotEmpty()) dto.score else null
-        return SpbhlMatch(tournament, date, arena, teams, score)
+    fun dtoToSpbhlMatch(dto: SpbhlMatchDto): SpbhlMatch? {
+        try {
+            val tournament = dto.tournament
+            val date = parseToLocalDateTime(dto.date, dto.time)
+            val arena = dto.arena
+            val teams = dto.teams
+            val score = if (dto.score.isNotEmpty()) dto.score else null
+            return SpbhlMatch(tournament, date, arena, teams, score)
+        } catch (e: IllegalArgumentException) {
+            println("Failed to map matchDto $dto. ${e.message}")
+            return null
+        }
     }
 
     fun spbhlMatchToMatchResult(match: SpbhlMatch): SpbhlMatchResult {

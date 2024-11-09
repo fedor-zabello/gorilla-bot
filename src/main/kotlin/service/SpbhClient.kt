@@ -26,6 +26,11 @@ class SpbhClient {
             })
         }
 
-        return matchDtoList.filter { it.teams != "" }
+        val result = matchDtoList.filter { matchDto ->
+            matchDto.teams.isNotEmpty()
+                    && matchDto.date.isNotEmpty()
+                    && matchDto.time.isNotEmpty()
+        }
+        return result
     }
 }

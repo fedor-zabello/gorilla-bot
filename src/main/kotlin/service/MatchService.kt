@@ -22,17 +22,19 @@ class MatchService(
     }
 
     fun getAllUpcoming(): List<SpbhlMatch> {
-        return spbhClient.getAllMatches().filter { it.score == "" }.map { spbhlMatchMapper.dtoToSpbhlMatch(it) }
+        return spbhClient.getAllMatches()
+            .filter { it.score.isEmpty() }
+            .mapNotNull { spbhlMatchMapper.dtoToSpbhlMatch(it) }
     }
 
     fun getAll(): List<SpbhlMatch> {
-        return spbhClient.getAllMatches().map { spbhlMatchMapper.dtoToSpbhlMatch(it) }
+        return spbhClient.getAllMatches().mapNotNull { spbhlMatchMapper.dtoToSpbhlMatch(it) }
     }
 
     fun getLastWithResult(): String {
         val latsMatchWithResultDto = spbhClient.getAllMatches()
             .filter { it.score.isNotEmpty() }
-            .map { spbhlMatchMapper.dtoToSpbhlMatch(it) }
+            .mapNotNull { spbhlMatchMapper.dtoToSpbhlMatch(it) }
             .maxByOrNull { it.date }
 
         return latsMatchWithResultDto?.let { messageGenerator.getMatchResultMessage(it) }
