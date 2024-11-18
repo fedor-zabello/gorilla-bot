@@ -37,6 +37,12 @@ class ChatIdJsonFileStorage(
         saveAll(chatIdSet)
     }
 
+    @Synchronized
+    override fun exists(chatId: Long): Boolean {
+        var chatIdSet = findAll()
+        return chatIdSet.contains(chatId)
+    }
+
     private fun saveAll(chatIdSet: Set<Long>) {
         jsonMapper.writeValue(file, chatIdSet)
     }

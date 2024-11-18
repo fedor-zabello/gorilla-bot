@@ -21,7 +21,6 @@ class NotificationServiceTest {
     private val gifStorage = mockk<GifStorage>()
     private val spbhlMatchMapper = mockk<SpbhlMatchMapper>()
     private val messageGenerator = mockk<MessageGenerator>()
-
     private val notificationService = NotificationService(
         chatIdJsonFileStorage,
         gorillaBot,

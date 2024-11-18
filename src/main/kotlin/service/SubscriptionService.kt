@@ -16,4 +16,9 @@ class SubscriptionService(
         chatIdJsonFileStorage.delete(chatId)
         println("Chat $chatId deleted")
     }
+
+    fun isSubscribed(chatId: Long): Boolean {
+        println("Get subscription status for $chatId")
+        return chatIdJsonFileStorage.exists(chatId)
+    }
 }

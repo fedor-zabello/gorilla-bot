@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.pigletsinc"
-version = "1.7-SNAPSHOT"
+version = "1.8-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -19,8 +19,10 @@ dependencies {
     implementation("org.jsoup:jsoup:1.16.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.1")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.1")
+
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.13.13")
+    testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.1")
 }
 
 tasks {
