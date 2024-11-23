@@ -53,7 +53,7 @@ class GorillaBot(
                         )
                         bot.sendMessage(
                             chatId = ChatId.fromId(message.chat.id),
-                            text = "Уведомления включены. Бот будет присылать уведомления о предстоящих и о результатах завершившихся игр",
+                            text = "Уведомления включены",
                             replyMarkup = inlineKeyboardMarkup,
                         )
                     } else {
@@ -87,7 +87,7 @@ class GorillaBot(
 
                     val chatId = callbackQuery.message?.chat?.id ?: return@callbackQuery
                     subscriptionService.subscribe(chatId)
-                    sendMessage(chatId, "Бот будет присылать уведомления об играх")
+                    sendMessage(chatId, "Уведомления включены\\. Бот будет присылать уведомления об играх")
                 }
             }
         }

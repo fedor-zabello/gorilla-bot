@@ -12,7 +12,8 @@ import org.junit.jupiter.api.BeforeEach
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.test.Test
-import kotlin.test.assertNotNull
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class SpbhlClientIntegrationTest {
 
@@ -45,7 +46,8 @@ class SpbhlClientIntegrationTest {
         val spbhlClient = SpbhClient("http://localhost:${wireMockServer.port()}", listOf("gorilla-team-id"))
         val matches = spbhlClient.getAllMatches()
 
-        assertNotNull(matches)
+        assertEquals(11, matches.size)
+        assertTrue(matches.all { match -> match.teams.isNotEmpty() })
     }
 
 
