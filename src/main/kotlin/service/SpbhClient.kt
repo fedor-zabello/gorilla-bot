@@ -14,28 +14,31 @@ class SpbhClient(
     fun getAllMatches(): List<SpbhlMatchDto> {
         val matchDtoList = mutableListOf<SpbhlMatchDto>()
 
-        teamIds.forEach {
-            val url = "$spbhlUrl/Schedule?TeamID=$it"
-            val document = Jsoup.connect(url).get()
-            val matchTable = document.select("#MatchGridView")
-            val matchRows = matchTable.select("tr")
+        try {
+            teamIds.forEach {
+                val url = "$spbhlUrl/Schedule?TeamID=$it"
+                val document = Jsoup.connect(url).get()
+                val matchTable = document.select("#MatchGridView")
+                val matchRows = matchTable.select("tr")
 
-            matchDtoList.addAll(matchRows.map {
-                val tournament = it.select("td:nth-child(1)").text()
-                val date = it.select("td:nth-child(4)").text()
-                val time = it.select("td:nth-child(5)").text()
-                val arena = it.select("td:nth-child(6)").text()
-                val teams = it.select("td:nth-child(7)").text()
-                val score = it.select("td:nth-child(8)").text()
-                SpbhlMatchDto(tournament, date, time, arena, teams, score)
-            })
+                matchDtoList.addAll(matchRows.map {
+                    val tournament = it.select("td:nth-child(1)").text()
+                    val date = it.select("td:nth-child(4)").text()
+                    val time = it.select("td:nth-child(5)").text()
+                    val arena = it.select("td:nth-child(6)").text()
+                    val teams = it.select("td:nth-child(7)").text()
+                    val score = it.select("td:nth-child(8)").text()
+                    SpbhlMatchDto(tournament, date, time, arena, teams, score)
+                })
+            }
+        } catch (e: Exception) {
+            println("ERROR: error while getting matches from spbhl. ${e.message}")
         }
 
-        val result = matchDtoList.filter { matchDto ->
+        return matchDtoList.filter { matchDto ->
             matchDto.teams.isNotEmpty()
                     && matchDto.date.isNotEmpty()
                     && matchDto.time.isNotEmpty()
         }
-        return result
     }
 }
