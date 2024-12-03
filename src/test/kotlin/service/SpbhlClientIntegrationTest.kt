@@ -9,6 +9,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertDoesNotThrow
 import java.nio.file.Files
 import java.nio.file.Paths
 import kotlin.test.Test
@@ -25,15 +26,6 @@ class SpbhlClientIntegrationTest {
         wireMockServer.start()
 
         configureFor("localhost", wireMockServer.port())
-
-        wireMockServer.stubFor(get(urlPathEqualTo("/Schedule"))
-            .withQueryParam("TeamID", equalTo("gorilla-team-id"))
-            .willReturn(aResponse()
-                .withStatus(200)
-                .withHeader("Content-Type", "text/html")
-                .withBody(loadHtmlResponse("schedule.html"))
-            )
-        )
     }
 
     @AfterEach
@@ -43,6 +35,17 @@ class SpbhlClientIntegrationTest {
 
     @Test
     fun `Get matches from SPBHL`() {
+        wireMockServer.stubFor(
+            get(urlPathEqualTo("/Schedule"))
+                .withQueryParam("TeamID", equalTo("gorilla-team-id"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "text/html")
+                        .withBody(loadHtmlResponse())
+                )
+        )
+
         val spbhlClient = SpbhClient("http://localhost:${wireMockServer.port()}", listOf("gorilla-team-id"))
         val matches = spbhlClient.getAllMatches()
 
@@ -50,10 +53,25 @@ class SpbhlClientIntegrationTest {
         assertTrue(matches.all { match -> match.teams.isNotEmpty() })
     }
 
+    @Test
+    fun `Should not throw not throw exception when fail to get matches`() {
+        wireMockServer.stubFor(
+            get(urlPathEqualTo("/Schedule"))
+                .withQueryParam("TeamID", equalTo("gorilla-team-id"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(503)
+                )
+        )
+        val spbhlClient = SpbhClient("http://localhost:${wireMockServer.port()}", listOf("gorilla-team-id"))
 
-    private fun loadHtmlResponse(fileName: String): String {
-        val resource = javaClass.classLoader.getResource(fileName)
-            ?: throw IllegalArgumentException("File not found: $fileName")
+        assertDoesNotThrow { spbhlClient.getAllMatches() }
+    }
+
+
+    private fun loadHtmlResponse(): String {
+        val resource = javaClass.classLoader.getResource("schedule.html")
+            ?: throw IllegalArgumentException("File not found")
         return Files.readString(Paths.get(resource.toURI()))
     }
 }

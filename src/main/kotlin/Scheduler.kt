@@ -33,7 +33,7 @@ class Scheduler(
     }
 
     private suspend fun scheduleNotifications() = coroutineScope {
-        println("Check matches for notifications")
+        println("Checking upcoming matches for notifications")
         matchService.getAllUpcoming()
             .filter { match ->
                 match.date.toLocalDate() == LocalDate.now().plusDays(1) && !scheduledForNotify.contains(match)
@@ -57,7 +57,7 @@ class Scheduler(
     }
 
     private suspend fun scheduleScoreChecks() = coroutineScope {
-        println("Check for score checks")
+        println("Checking today's matches for score updates")
         matchService.getAllUpcoming()
             .filter { match ->
                 match.date.toLocalDate() == LocalDate.now() && !scheduledForCheckResult.contains(match)

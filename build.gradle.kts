@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.pigletsinc"
-version = "1.9-SNAPSHOT"
+version = "1.10-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -22,7 +22,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation("io.mockk:mockk:1.13.13")
-    testImplementation("com.github.tomakehurst:wiremock-jre8:2.35.1")
+    testImplementation("org.wiremock:wiremock:3.10.0")
 }
 
 tasks {
