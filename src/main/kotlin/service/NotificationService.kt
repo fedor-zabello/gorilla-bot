@@ -48,9 +48,7 @@ class NotificationService(
 
     private fun notifySubscribers(message: String, gifUrl: String?) {
         chatIdJsonFileStorage.findAll().forEach { chatId ->
-            if (sendGifs) {
-                gifUrl?.let { gorillaBot.sendGifSilently(chatId, it) }
-            }
+            gifUrl?.takeIf { sendGifs }?. let { gorillaBot.sendGifSilently(chatId, it) }
             gorillaBot.sendMessage(chatId, message)
         }
     }
