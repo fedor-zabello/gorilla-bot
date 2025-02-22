@@ -1,5 +1,6 @@
 package service
 
+import GorillaBot
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -56,7 +57,7 @@ class NotificationServiceTest {
         notificationService.notifyForUpcomingMatch(match)
 
         chatIsSet.forEach { chatId ->
-            verify(exactly = 1) { gorillaBot.sendGifSilently(chatId, gifUrl) }
+            verify(exactly = 0) { gorillaBot.sendGifSilently(chatId, gifUrl) }
             verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
         }
     }
@@ -82,7 +83,7 @@ class NotificationServiceTest {
 
         verify(exactly = 1) { messageGenerator.getGorillaWonMessage(match) }
         chatIsSet.forEach { chatId ->
-            verify(exactly = 1) { gorillaBot.sendGifSilently(chatId, gifUrl) }
+            verify(exactly = 0) { gorillaBot.sendGifSilently(chatId, gifUrl) }
             verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
         }
     }
