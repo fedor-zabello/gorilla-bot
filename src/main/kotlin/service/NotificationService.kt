@@ -1,5 +1,6 @@
 package service
 
+import GorillaBot
 import model.SpbhlMatch
 import repository.ChatIdRepository
 import repository.GifStorage
@@ -14,6 +15,7 @@ class NotificationService(
     private val messageGenerator: MessageGenerator
 ) {
     private val adminChatId = 127845863L
+    private val sendGifs = false
 
     fun notifyForUpcomingMatch(match: SpbhlMatch) {
         val message = messageGenerator.getNotificationForUpcomingMatch(match)
@@ -46,7 +48,9 @@ class NotificationService(
 
     private fun notifySubscribers(message: String, gifUrl: String?) {
         chatIdJsonFileStorage.findAll().forEach { chatId ->
-            gifUrl?.let { gorillaBot.sendGifSilently(chatId, it) }
+            if (sendGifs) {
+                gifUrl?.let { gorillaBot.sendGifSilently(chatId, it) }
+            }
             gorillaBot.sendMessage(chatId, message)
         }
     }
