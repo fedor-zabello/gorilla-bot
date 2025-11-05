@@ -14,12 +14,12 @@ import kotlin.test.assertTrue
 class MatchServiceTest {
     private val spbhlMatchMapper = SpbhlMatchMapper()
     private val messageGenerator = mockk<MessageGenerator>()
-    private val spbhClient = mockk<SpbhClient>()
-    private val matchService = MatchService(spbhlMatchMapper, messageGenerator, spbhClient)
+    private val spbhlClient = mockk<SpbhlClient>()
+    private val matchService = MatchService(spbhlMatchMapper, messageGenerator, spbhlClient)
 
     @BeforeTest
     fun init() {
-        every { spbhClient.getAllMatches() }.returns(MatchFactoryForTest.getMatchDtoList())
+        every { spbhlClient.getAllMatches() }.returns(MatchFactoryForTest.getMatchDtoList())
         every { messageGenerator.getUpcomingMatchMessage(any()) }.returns("Upcoming match info")
     }
 
@@ -27,17 +27,17 @@ class MatchServiceTest {
     fun `Test get nearest matches`() {
         val nearestMatches = matchService.getNearestAsStrings()
 
-        verify(exactly = 1) { spbhClient.getAllMatches() }
+        verify(exactly = 1) { spbhlClient.getAllMatches() }
         assertEquals(3, nearestMatches.size)
     }
 
     @Test
     fun `Case when no upcoming matches found`() {
-        every { spbhClient.getAllMatches() }.returns(emptyList())
+        every { spbhlClient.getAllMatches() }.returns(emptyList())
 
         val nearestMatches = matchService.getNearestAsStrings()
 
-        verify(exactly = 1) { spbhClient.getAllMatches() }
+        verify(exactly = 1) { spbhlClient.getAllMatches() }
         assertTrue(nearestMatches.isEmpty())
     }
 
@@ -45,7 +45,7 @@ class MatchServiceTest {
     fun `Test get all upcoming matches`() {
         val upcomingMatches = matchService.getAllUpcoming()
 
-        verify(exactly = 1) { spbhClient.getAllMatches() }
+        verify(exactly = 1) { spbhlClient.getAllMatches() }
         assertEquals(4, upcomingMatches.size)
     }
 
@@ -53,7 +53,7 @@ class MatchServiceTest {
     fun `Test get all matches`() {
         val allMatches = matchService.getAll()
 
-        verify(exactly = 1) { spbhClient.getAllMatches() }
+        verify(exactly = 1) { spbhlClient.getAllMatches() }
         assertEquals(7, allMatches.size)
     }
 
@@ -65,7 +65,7 @@ class MatchServiceTest {
 
         val lastResult = matchService.getLastWithResult()
 
-        verify(exactly = 1) { spbhClient.getAllMatches() }
+        verify(exactly = 1) { spbhlClient.getAllMatches() }
         assertTrue(lastResult.contains(message))
     }
 }

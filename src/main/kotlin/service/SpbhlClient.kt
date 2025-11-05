@@ -3,7 +3,7 @@ package service
 import model.SpbhlMatchDto
 import org.jsoup.Jsoup
 
-class SpbhClient(
+class SpbhlClient(
     private val spbhlUrl: String = "https://spbhl.ru",
     private val teamIds: List<String> = listOf(
         "b82f09ec-bf65-4d64-881f-0bef1598d936",
@@ -15,8 +15,8 @@ class SpbhClient(
         val matchDtoList = mutableListOf<SpbhlMatchDto>()
 
         try {
-            teamIds.forEach {
-                val url = "$spbhlUrl/Schedule?TeamID=$it"
+            teamIds.forEach { teamId ->
+                val url = "$spbhlUrl/Schedule?TeamID=$teamId"
                 val document = Jsoup.connect(url).get()
                 val matchTable = document.select("#MatchGridView")
                 val matchRows = matchTable.select("tr")
