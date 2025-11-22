@@ -10,7 +10,6 @@ import model.SpbhlMatch
 import model.SpbhlMatchResult
 import org.junit.jupiter.api.BeforeEach
 import repository.ChatIdRepository
-import repository.GifStorage
 import util.MessageGenerator
 import util.SpbhlMatchMapper
 import java.time.LocalDateTime
@@ -19,13 +18,11 @@ import kotlin.test.Test
 class NotificationServiceTest {
     private val chatIdJsonFileStorage = mockk<ChatIdRepository>()
     private val gorillaBot = mockk<GorillaBot>()
-    private val gifStorage = mockk<GifStorage>()
     private val spbhlMatchMapper = mockk<SpbhlMatchMapper>()
     private val messageGenerator = mockk<MessageGenerator>()
     private val notificationService = NotificationService(
         chatIdJsonFileStorage,
         gorillaBot,
-        gifStorage,
         spbhlMatchMapper,
         messageGenerator
     )
@@ -52,7 +49,6 @@ class NotificationServiceTest {
         val gifUrl = "https://gif.com"
 
         every { messageGenerator.getNotificationForUpcomingMatch(any()) } returns message
-        every { gifStorage.findAnyUpcomingGifUrl() } returns gifUrl
 
         notificationService.notifyForUpcomingMatch(match)
 
@@ -76,7 +72,6 @@ class NotificationServiceTest {
         val gifUrl = "https://gif.com"
 
         every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
-        every { gifStorage.findAnyWinUrl() } returns gifUrl
         every { messageGenerator.getGorillaWonMessage(match) } returns message
 
         notificationService.notifyForResult(match)
@@ -102,7 +97,6 @@ class NotificationServiceTest {
         val gifUrl = "https://gif.com"
 
         every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
-        every { gifStorage.findAnyWinUrl() } returns gifUrl
         every { messageGenerator.getDrawMessage(match) } returns message
 
         notificationService.notifyForResult(match)
@@ -128,7 +122,6 @@ class NotificationServiceTest {
         val gifUrl = "https://gif.com"
 
         every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
-        every { gifStorage.findAnyWinUrl() } returns gifUrl
         every { messageGenerator.getDefeatMessage(match) } returns message
 
         notificationService.notifyForResult(match)

@@ -1,5 +1,4 @@
 import repository.ChatIdJsonFileStorage
-import repository.GifStorage
 import service.MatchService
 import service.NotificationService
 import service.SpbhlClient
@@ -8,11 +7,7 @@ import util.MessageGenerator
 import util.SpbhlMatchMapper
 
 fun main() {
-    val chatIdJsonFileStorage = ChatIdJsonFileStorage("/var/lib/gorilla-bot/chat_id.json")
-    val gifStorage = GifStorage(
-        "/var/lib/gorilla-bot/gif/gorilla_wins.json",
-        "/var/lib/gorilla-bot/gif/get_ready_for_match.json",
-    )
+    val chatIdJsonFileStorage = ChatIdJsonFileStorage("/var/lib/gorilla-bot/ ")
 
     val messageGenerator = MessageGenerator()
     val spbhlMatchMapper = SpbhlMatchMapper()
@@ -21,7 +16,7 @@ fun main() {
     val subscriptionService = SubscriptionService(chatIdJsonFileStorage)
     val gorillaBot = GorillaBot(subscriptionService, matchService, messageGenerator)
     val notificationService =
-        NotificationService(chatIdJsonFileStorage, gorillaBot, gifStorage, spbhlMatchMapper, messageGenerator)
+        NotificationService(chatIdJsonFileStorage, gorillaBot, spbhlMatchMapper, messageGenerator)
     val scheduler = Scheduler(matchService, notificationService)
 
     scheduler.start()
