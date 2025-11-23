@@ -32,7 +32,6 @@ class NotificationServiceTest {
     @BeforeEach
     fun init() {
         every { chatIdJsonFileStorage.findAll() } returns chatIsSet
-        every { gorillaBot.sendGifSilently(any(), any()) } just Runs
         every { gorillaBot.sendMessage(any(), any()) } just Runs
     }
 
@@ -46,14 +45,12 @@ class NotificationServiceTest {
             null
         )
         val message = "match is scheduled for tomorrow"
-        val gifUrl = "https://gif.com"
 
         every { messageGenerator.getNotificationForUpcomingMatch(any()) } returns message
 
         notificationService.notifyForUpcomingMatch(match)
 
         chatIsSet.forEach { chatId ->
-            verify(exactly = 0) { gorillaBot.sendGifSilently(chatId, gifUrl) }
             verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
         }
     }
@@ -69,7 +66,6 @@ class NotificationServiceTest {
         )
         val result = SpbhlMatchResult("Горилла" to "Самураи Старт", 4 to 2)
         val message = "Gorilla Won"
-        val gifUrl = "https://gif.com"
 
         every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
         every { messageGenerator.getGorillaWonMessage(match) } returns message
@@ -78,7 +74,6 @@ class NotificationServiceTest {
 
         verify(exactly = 1) { messageGenerator.getGorillaWonMessage(match) }
         chatIsSet.forEach { chatId ->
-            verify(exactly = 0) { gorillaBot.sendGifSilently(chatId, gifUrl) }
             verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
         }
     }
@@ -94,7 +89,6 @@ class NotificationServiceTest {
         )
         val result = SpbhlMatchResult("Горилла" to "Самураи Старт", 4 to 4)
         val message = "It's a draw"
-        val gifUrl = "https://gif.com"
 
         every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
         every { messageGenerator.getDrawMessage(match) } returns message
@@ -103,7 +97,6 @@ class NotificationServiceTest {
 
         verify(exactly = 1) { messageGenerator.getDrawMessage(match) }
         chatIsSet.forEach { chatId ->
-            verify(exactly = 0) { gorillaBot.sendGifSilently(chatId, gifUrl) }
             verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
         }
     }
@@ -119,7 +112,6 @@ class NotificationServiceTest {
         )
         val result = SpbhlMatchResult("Горилла" to "Самураи Старт", 2 to 4)
         val message = "defeat"
-        val gifUrl = "https://gif.com"
 
         every { spbhlMatchMapper.spbhlMatchToMatchResult(match) } returns result
         every { messageGenerator.getDefeatMessage(match) } returns message
@@ -128,7 +120,6 @@ class NotificationServiceTest {
 
         verify(exactly = 1) { messageGenerator.getDefeatMessage(match) }
         chatIsSet.forEach { chatId ->
-            verify(exactly = 0) { gorillaBot.sendGifSilently(chatId, gifUrl) }
             verify(exactly = 1) { gorillaBot.sendMessage(chatId, message) }
         }
     }

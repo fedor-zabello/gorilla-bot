@@ -6,7 +6,6 @@ import com.github.kotlintelegrambot.dispatcher.command
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.InlineKeyboardMarkup
 import com.github.kotlintelegrambot.entities.ParseMode.MARKDOWN_V2
-import com.github.kotlintelegrambot.entities.TelegramFile
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
 import service.MatchService
 import service.SubscriptionService
@@ -96,7 +95,7 @@ class GorillaBot(
     }
 
     fun sendMessage(chatId: Long, text: String) {
-        var result = bot.sendMessage(
+        val result = bot.sendMessage(
             chatId = ChatId.fromId(chatId),
             text = text,
             parseMode = MARKDOWN_V2,
@@ -106,14 +105,5 @@ class GorillaBot(
         }, {
             println("ERROR: Failed to send message. Error $it.")
         })
-    }
-
-    fun sendGifSilently(chatId: Long, gifSrc: String) {
-        val telegramFile = TelegramFile.ByUrl(gifSrc)
-        bot.sendAnimation(
-            chatId = ChatId.fromId(chatId),
-            animation = telegramFile,
-            disableNotification = true
-        )
     }
 }
