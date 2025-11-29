@@ -46,7 +46,7 @@ class SpbhlClientIntegrationTest {
                 )
         )
 
-        val spbhlClient = SpbhClient("http://localhost:${wireMockServer.port()}", listOf("gorilla-team-id"))
+        val spbhlClient = SpbhlClient("http://localhost:${wireMockServer.port()}", listOf("gorilla-team-id"))
         val matches = spbhlClient.getAllMatches()
 
         assertEquals(11, matches.size)
@@ -63,7 +63,7 @@ class SpbhlClientIntegrationTest {
                         .withStatus(503)
                 )
         )
-        val spbhlClient = SpbhClient("http://localhost:${wireMockServer.port()}", listOf("gorilla-team-id"))
+        val spbhlClient = SpbhlClient("http://localhost:${wireMockServer.port()}", listOf("gorilla-team-id"))
 
         assertDoesNotThrow { spbhlClient.getAllMatches() }
     }

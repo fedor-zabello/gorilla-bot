@@ -10,7 +10,7 @@ import kotlin.collections.take
 class MatchService(
     private val spbhlMatchMapper: SpbhlMatchMapper,
     private val messageGenerator: MessageGenerator,
-    private val spbhClient: SpbhClient
+    private val spbhlClient: SpbhlClient
 ) {
     private val nearestMatchesCount = 3
 
@@ -22,17 +22,17 @@ class MatchService(
     }
 
     fun getAllUpcoming(): List<SpbhlMatch> {
-        return spbhClient.getAllMatches()
+        return spbhlClient.getAllMatches()
             .filter { it.score.isEmpty() }
             .mapNotNull { spbhlMatchMapper.dtoToSpbhlMatch(it) }
     }
 
     fun getAll(): List<SpbhlMatch> {
-        return spbhClient.getAllMatches().mapNotNull { spbhlMatchMapper.dtoToSpbhlMatch(it) }
+        return spbhlClient.getAllMatches().mapNotNull { spbhlMatchMapper.dtoToSpbhlMatch(it) }
     }
 
     fun getLastWithResult(): String {
-        val latsMatchWithResultDto = spbhClient.getAllMatches()
+        val latsMatchWithResultDto = spbhlClient.getAllMatches()
             .filter { it.score.isNotEmpty() }
             .mapNotNull { spbhlMatchMapper.dtoToSpbhlMatch(it) }
             .maxByOrNull { it.date }
