@@ -45,6 +45,7 @@ class SpbhlClient(
     }
 
     private fun allMatchesFromSpbhl(url: String): Document {
+        println("Get all matches from website")
         return Jsoup.connect(url)
             .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36")
             .referrer("https://google.com")

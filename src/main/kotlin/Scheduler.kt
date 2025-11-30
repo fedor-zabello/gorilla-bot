@@ -1,18 +1,19 @@
 import java.time.LocalDate
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.random.Random
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import model.SpbhlMatch
 import service.MatchService
 import service.NotificationService
 import util.DateTimeUtils
-import kotlin.time.Duration.Companion.milliseconds
+import util.DelayUtils
+import kotlin.time.Duration.Companion.seconds
 
 class Scheduler(
     private val matchService: MatchService,
@@ -28,17 +29,14 @@ class Scheduler(
         }
 
     private suspend fun runNotificationChecker() = coroutineScope {
-        delay(5 * 1000L) // Initial delay
-        while (true) {
+        delay(5.seconds) // Initial delay
+        while (isActive) {
             println("Checking upcoming matches on spbhl...")
             val upcomingMatches = matchService.getAllUpcoming()
             launch { scheduleNotifications(upcomingMatches) }
             launch { scheduleScoreChecks(upcomingMatches) }
 
-            val jitter = (Random.nextLong(30.minutes.inWholeMilliseconds)).milliseconds
-            val delay = 6.hours + jitter
-            println(delay)
-            delay(delay)
+            delay(DelayUtils.delayWithJitter(6.hours, 30.minutes))
         }
     }
 
@@ -114,9 +112,7 @@ class Scheduler(
                     notificationService.notifyForResult(updatedMatch)
                     scoreDiscovered = true
                 }
-            val delay = 5.minutes
-            val jitter = (Random.nextLong(4.minutes.inWholeMilliseconds)).milliseconds
-            delay(delay + jitter)
+            delay(DelayUtils.delayWithJitter(5.minutes, 5.minutes))
         }
     }
 }
