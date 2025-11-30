@@ -8,8 +8,8 @@ class SpbhlClient(
         private val spbhlUrl: String = "https://spbhl.ru",
         private val teamIds: List<String> =
                 listOf(
-                        "b82f09ec-bf65-4d64-881f-0bef1598d936",
-                        "dc079cd6-d6e2-4b12-b7fa-b8676195a081"
+                        "b82f09ec-bf65-4d64-881f-0bef1598d936", // Gorilla
+//                        "dc079cd6-d6e2-4b12-b7fa-b8676195a081", // Gorilla-2
                 ),
 ) {
 
@@ -45,7 +45,7 @@ class SpbhlClient(
     }
 
     private fun allMatchesFromSpbhl(url: String): Document {
-        println("Get all matches from website")
+        println("Get all matches from website $url")
         return Jsoup.connect(url)
             .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36")
             .referrer("https://google.com")
