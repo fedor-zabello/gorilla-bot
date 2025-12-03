@@ -46,13 +46,25 @@ class SpbhlClient(
 
     private fun allMatchesFromSpbhl(url: String): Document {
         println("Get all matches from website $url")
-        return Jsoup.connect(url)
-            .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36")
-            .referrer("https://google.com")
-            .timeout(10000)
+
+        val connection = Jsoup.connect(url)
+            .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36")
+            .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8")
+            .header("Accept-Language", "en-US,en;q=0.9,ru;q=0.8")
+            .header("Accept-Encoding", "gzip, deflate, br, zstd")
+            .header("Connection", "keep-alive")
+            .header("Upgrade-Insecure-Requests", "1")
+            .header("Sec-Fetch-Dest", "document")
+            .header("Sec-Fetch-Mode", "navigate")
+            .header("Sec-Fetch-Site", "none")
+            .header("Sec-Fetch-User", "?1")
+            .header("Cache-Control", "max-age=0")
+            .referrer("https://www.google.com/")
+            .timeout(20000)
             .followRedirects(true)
             .ignoreContentType(true)
-            .get()
+
+        return connection.get()
     }
 
 }
