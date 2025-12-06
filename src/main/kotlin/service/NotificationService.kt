@@ -15,8 +15,9 @@ class NotificationService(
     private val adminChatId = 127845863L
 
     fun notifyForUpcomingMatch(match: SpbhlMatch) {
-        val message = messageGenerator.getNotificationForUpcomingMatch(match)
+        println("Notifying all subscribers about upcoming match $match")
 
+        val message = messageGenerator.getNotificationForUpcomingMatch(match)
         notifySubscribers(message)
     }
 

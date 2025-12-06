@@ -7,7 +7,7 @@ import util.MessageGenerator
 import util.SpbhlMatchMapper
 
 fun main() {
-    val chatIdJsonFileStorage = ChatIdJsonFileStorage("/var/lib/gorilla-bot/ ")
+    val chatIdJsonFileStorage = ChatIdJsonFileStorage("/var/lib/gorilla-bot/chat_id.json")
 
     val messageGenerator = MessageGenerator()
     val spbhlMatchMapper = SpbhlMatchMapper()
